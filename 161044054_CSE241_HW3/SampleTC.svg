@@ -1,0 +1,6 @@
+<svg version="1.1"
+baseProfile="full"
+height="250" width="250" xmlns="http://www.w3.org/2000/svg">>
+	<polygon points="125 0 0 216.5 250 216.5" fill="red" />
+<circle cx="86.6051" cy="166.5" r="50" fill="green" transform="rotate(0,0,0)" />
+</svg>

@@ -1,0 +1,41 @@
+<svg version="1.1"
+baseProfile="full"
+height="100" width="100" xmlns="http://www.w3.org/2000/svg">>
+	<polygon points="50 0 0 86.6 100 86.6" fill="red" />
+<polygon points="50 0 57.5 12.99 42.5 12.99" fill="green" transform="rotate(0,0,0)" />
+<polygon points="50 25.98 57.5 12.99 42.5 12.99" fill="green" transform="rotate(0,0,0)" />
+<polygon points="42.5 12.99 50 25.98 35 25.98" fill="green" transform="rotate(0,0,0)" />
+<polygon points="42.5 38.97 50 25.98 35 25.98" fill="green" transform="rotate(0,0,0)" />
+<polygon points="57.5 12.99 65 25.98 50 25.98" fill="green" transform="rotate(0,0,0)" />
+<polygon points="57.5 38.97 65 25.98 50 25.98" fill="green" transform="rotate(0,0,0)" />
+<polygon points="35 25.98 42.5 38.97 27.5 38.97" fill="green" transform="rotate(0,0,0)" />
+<polygon points="35 51.96 42.5 38.97 27.5 38.97" fill="green" transform="rotate(0,0,0)" />
+<polygon points="50 25.98 57.5 38.97 42.5 38.97" fill="green" transform="rotate(0,0,0)" />
+<polygon points="50 51.96 57.5 38.97 42.5 38.97" fill="green" transform="rotate(0,0,0)" />
+<polygon points="65 25.98 72.5 38.97 57.5 38.97" fill="green" transform="rotate(0,0,0)" />
+<polygon points="65 51.96 72.5 38.97 57.5 38.97" fill="green" transform="rotate(0,0,0)" />
+<polygon points="27.5 38.97 35 51.96 20 51.96" fill="green" transform="rotate(0,0,0)" />
+<polygon points="27.5 64.95 35 51.96 20 51.96" fill="green" transform="rotate(0,0,0)" />
+<polygon points="42.5 38.97 50 51.96 35 51.96" fill="green" transform="rotate(0,0,0)" />
+<polygon points="42.5 64.95 50 51.96 35 51.96" fill="green" transform="rotate(0,0,0)" />
+<polygon points="57.5 38.97 65 51.96 50 51.96" fill="green" transform="rotate(0,0,0)" />
+<polygon points="57.5 64.95 65 51.96 50 51.96" fill="green" transform="rotate(0,0,0)" />
+<polygon points="72.5 38.97 80 51.96 65 51.96" fill="green" transform="rotate(0,0,0)" />
+<polygon points="72.5 64.95 80 51.96 65 51.96" fill="green" transform="rotate(0,0,0)" />
+<polygon points="20 51.96 27.5 64.95 12.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="20 77.94 27.5 64.95 12.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="35 51.96 42.5 64.95 27.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="35 77.94 42.5 64.95 27.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="50 51.96 57.5 64.95 42.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="50 77.94 57.5 64.95 42.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="65 51.96 72.5 64.95 57.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="65 77.94 72.5 64.95 57.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="80 51.96 87.5 64.95 72.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="80 77.94 87.5 64.95 72.5 64.95" fill="green" transform="rotate(0,0,0)" />
+<polygon points="12.5 64.95 20 77.94 5 77.94" fill="green" transform="rotate(0,0,0)" />
+<polygon points="27.5 64.95 35 77.94 20 77.94" fill="green" transform="rotate(0,0,0)" />
+<polygon points="42.5 64.95 50 77.94 35 77.94" fill="green" transform="rotate(0,0,0)" />
+<polygon points="57.5 64.95 65 77.94 50 77.94" fill="green" transform="rotate(0,0,0)" />
+<polygon points="72.5 64.95 80 77.94 65 77.94" fill="green" transform="rotate(0,0,0)" />
+<polygon points="87.5 64.95 95 77.94 80 77.94" fill="green" transform="rotate(0,0,0)" />
+</svg>
