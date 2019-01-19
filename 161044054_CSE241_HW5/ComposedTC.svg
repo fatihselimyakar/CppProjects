@@ -1,0 +1,22 @@
+<svg version="1.1"
+baseProfile="full"
+height="250" width="250" xmlns="http://www.w3.org/2000/svg">>
+    	<polygon points="125 0 0 216.5 250 216.5" fill="red" />
+<circle cx="31.1778" cy="198.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="67.1778" cy="198.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="103.178" cy="198.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="139.178" cy="198.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="175.178" cy="198.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="211.178" cy="198.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="51.963" cy="162.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="87.963" cy="162.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="123.963" cy="162.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="159.963" cy="162.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="195.963" cy="162.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="72.7483" cy="126.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="108.748" cy="126.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="144.748" cy="126.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="93.5335" cy="90.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="129.533" cy="90.5" r="18" fill="green" transform="rotate(0,0,0)" />
+<circle cx="114.319" cy="54.5" r="18" fill="green" transform="rotate(0,0,0)" />
+</svg>

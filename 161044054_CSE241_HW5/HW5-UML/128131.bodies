@@ -1,0 +1,76 @@
+class Shape
+!!!138115.cpp!!!	Shape()
+ name="default";
+!!!138243.cpp!!!	Shape(in x : double, in y : double, in newRotate : int, in p : char)
+        name="default";
+        if(x<0||y<0)
+            throw MyException("Pos_x and pos_y are not smaller than 0");
+        else{
+            pos_x=x;
+            pos_y=y;
+        }
+        if(newRotate>360||newRotate<0)
+            throw MyException("Rotate must be between the 0 and 360");
+        else
+            rotate=newRotate;
+        if(p=='c'||p=='i')
+            position=p;
+        else
+            throw MyException("Position must be c or i");
+
+!!!138371.cpp!!!	Shape(in x : double, in y : double)
+        name="default";
+        if(x<0||y<0)
+            throw MyException("Pos_x and pos_y are not smaller than 0");
+        else{
+            pos_x=x;
+            pos_y=y;
+        }
+        rotate=0;
+        position='c';
+!!!139395.cpp!!!	operator ==(in rightSide : Shape) : bool
+ return area()==rightSide.area();
+!!!139523.cpp!!!	operator !=(in rightSide : Shape) : bool
+ return area()!=rightSide.area();
+!!!139651.cpp!!!	operator >(in rightSide : Shape) : bool
+ return  area()>rightSide.area();
+!!!139779.cpp!!!	operator <(in rightSide : Shape) : bool
+ return  area()<rightSide.area();
+!!!139907.cpp!!!	operator >=(in rightSide : Shape) : bool
+ return  area()>=rightSide.area();
+!!!140035.cpp!!!	operator <=(in rightSide : Shape) : bool
+ return  area()<=rightSide.area();
+!!!140163.cpp!!!	set(in x : double, in y : double, in newRotate : int, in p : char) : void
+        if(x<0||y<0)
+            throw MyException("Pos_x and pos_y are not smaller than 0");
+        else{
+            pos_x=x;
+            pos_y=y;
+        }
+        if(newRotate<=360&&newRotate>=0)
+            throw MyException("Rotate between the 0 and 360");
+        else
+            rotate=newRotate;
+        if(p=='c'||p=='i')
+            throw MyException("Position must be c or i");
+        else
+            position=p;
+        return;
+!!!140291.cpp!!!	set(in x : double, in y : double) : void
+        if(x<0||y<0)
+            throw MyException("Pos_x and pos_y are not smaller than 0");
+        else{
+            pos_x=x;
+            pos_y=y;
+        }
+        return;
+!!!140419.cpp!!!	getPosX() : double
+ return pos_x;
+!!!140547.cpp!!!	getPosY() : double
+ return pos_y;
+!!!140675.cpp!!!	getRotate() : int
+ return rotate;
+!!!140803.cpp!!!	getPosition() : char
+return position;
+!!!140931.cpp!!!	getName() : string
+ return name;

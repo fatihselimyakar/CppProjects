@@ -1,0 +1,83 @@
+class PolygonVect
+!!!135171.cpp!!!	PolygonVect()
+/*EMPTY*/
+!!!135299.cpp!!!	PolygonVect(in pointVector : vector<Point2d>)
+ polyvector=pointVector;
+!!!135427.cpp!!!	PolygonVect(in rec : Rectangle)
+        //I FIND THE POINTS ACCORDING TO STARTING POINTS TO ALL CORNER POİNTS WITH WITH AND HEIGHT
+        Point2d pt(rec.getPosX(),rec.getPosY());
+        polyvector.push_back(pt);
+        pt.set(rec.getPosX()+rec.getWidth(),rec.getPosY());
+        polyvector.push_back(pt);
+        pt.set(rec.getPosX()+rec.getWidth(),rec.getPosY()+rec.getHeight());
+        polyvector.push_back(pt);
+        pt.set(rec.getPosX(),rec.getPosY()+rec.getHeight());
+        polyvector.push_back(pt);
+
+        rotate=0;
+        pos_x=0;
+        pos_y=0;
+        if(rec.getPosition()=='i'||rec.getPosition()=='c')
+            position=rec.getPosition();
+        else
+            throw MyException("Position is not true");
+!!!135555.cpp!!!	PolygonVect(in tri : Triangle)
+        Point2d pt(tri.getTriX(),tri.getTriY());
+        polyvector.push_back(pt);
+        pt.set(tri.getTri2X(),tri.getTri2Y());
+        polyvector.push_back(pt);
+        pt.set(tri.getTri3X(),tri.getTri3Y());
+        polyvector.push_back(pt);
+
+        if(tri.getRotate()<=360&&tri.getRotate()>=0)
+            rotate=tri.getRotate();
+        else
+            throw MyException("degree is not true");
+
+        if(tri.getPosition()=='i'||tri.getPosition()=='c')
+            position=tri.getPosition();
+        else
+            throw MyException("Position is not true");
+
+    	pos_x=tri.getPosX();
+        pos_y=tri.getPosY();
+!!!135683.cpp!!!	PolygonVect(in cir : Circle)
+        polyvector.reserve(100);
+        if(cir.getRotate()<=360&&cir.getRotate()>=0)
+            rotate=cir.getRotate();
+        else
+            throw MyException("degree is not true");
+
+        if(cir.getPosition()=='i'||cir.getPosition()=='c')
+            position=cir.getPosition();
+        else
+            throw MyException("Position is not true");
+
+        //I USED THE CIRCLE EQUATION WHILE I AM FINDING THE 100 POINT
+        //AND I USED HELPER FUNTION "CircleEquationY()" TOO
+        pos_x=cir.getPosX();
+        pos_y=cir.getPosY();
+        double increase=(2*cir.getRadius())/50.1;
+        double startingX=cir.getCenterCoordX()-cir.getRadius();
+        double startingY;
+        double reverseY;
+        Point2d pt;
+        //FOR THE BOTTOM SIDE
+        for(int i=0;i<50;i+=1,startingX+=increase){
+            startingY=CircleEquationY(cir.getCenterCoordX(),cir.getCenterCoordY(),cir.getRadius(),startingX);
+            pt.set(startingX,startingY);
+            polyvector.push_back(pt);
+        }
+        //FOR THE TOP SIDE
+        startingX=cir.getCenterCoordX()-cir.getRadius()+increase;
+        auto it = polyvector.end();
+        for(int i=0;i<50;i+=1,startingX+=increase){
+            startingY=CircleEquationY(cir.getCenterCoordX(),cir.getCenterCoordY(),cir.getRadius(),startingX);
+            reverseY=cir.getCenterCoordY()-(startingY-cir.getCenterCoordY());
+            pt.set(startingX,reverseY);
+            polyvector.insert(it,pt);
+        }
+!!!135939.cpp!!!	operator [](in index : int) : Point2d
+        if(index<0 || index>=polyvector.size())
+            throw MyException("Your index value isn't true");
+        return polyvector[index];

@@ -1,0 +1,57 @@
+class Circle
+!!!128003.cpp!!!	Circle()
+ name="circle";
+!!!128131.cpp!!!	Circle(in r : int, in positionVal : char)
+        name="circle";
+        if(r<=0)
+            throw MyException("Circle's Values are false!");
+        else
+            radius=r;
+
+!!!128259.cpp!!!	Circle(in x : double, in y : double, in newRotate : int, in p : char, in centerX : double, in centerY : double, in r : double)
+        name="circle";
+        if(centerX<0||centerY<0||r<=0)
+            throw MyException("Circle's Values are false!");
+        else{
+            centerCoordX=centerX;
+            centerCoordY=centerY;
+            radius=r;
+        }
+
+!!!128387.cpp!!!	area() : double
+ return PI*radius*radius;
+!!!128515.cpp!!!	perimeter() : double
+ return 2*PI*radius;
+!!!128899.cpp!!!	operator ++(in  : int) : Shape
+         Circle c1(pos_x,pos_y,rotate,position,++centerCoordX,++centerCoordY,radius);
+         Shape*temp=&c1;
+         return *temp;
+!!!129155.cpp!!!	operator --(in  : int) : Shape
+        Circle c1(pos_x,pos_y,rotate,position,--centerCoordX,--centerCoordY,radius);
+        Shape*temp=&c1;
+        return *temp;
+!!!129283.cpp!!!	set(in x : double, in y : double, in newRotate : int, in p : char, in centerX : double, in centerY : double, in r : double) : void
+        if(r<=0||centerX<0||centerY<0||x<0||y<0)
+    		throw MyException("YOU ENTERED UNVALID RADIUS OR COORDINATE VALUE");
+    	else{
+    		radius=r;
+    		centerCoordX=centerX;
+    		centerCoordY=centerY;
+    		pos_x=x;
+    		pos_y=y;
+    	}
+
+    	if(p!='c'||p!='i'){
+    		throw MyException("YOU ENTERED UNVALID POSITION VALUE");
+    	}
+    	else
+    		position=p;
+
+    	rotate=newRotate;
+    	return;
+!!!129411.cpp!!!	getCenterCoordX() : double
+ return centerCoordX;
+!!!129539.cpp!!!	getCenterCoordY() : double
+ return centerCoordY;
+!!!129667.cpp!!!	getRadius() : double
+ return radius;

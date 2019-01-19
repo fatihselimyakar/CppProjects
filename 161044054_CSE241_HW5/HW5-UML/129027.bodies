@@ -1,0 +1,28 @@
+class Triangle
+!!!141187.cpp!!!	Triangle()
+ name="triangle";
+!!!141315.cpp!!!	Triangle(in lateralVal : int, in positionVal : char, in trixVal : double, in triyVal : double, in tri2xVal : double, in tri2yVal : double, in tri3xVal : double, in tri3yVal : double, in rotateVal : int, in pos_xVal : double, in pos_yVal : double)
+        name="triangle";
+        if(trixVal<0||tri2xVal<0||tri3xVal<0||triyVal<0||tri2yVal<0||tri3yVal<0||lateralVal<0)
+            throw MyException("UNVALID TRIANGLE VALUES");
+        else{
+            triX=trixVal;
+            triY=triyVal;
+            tri2X=tri2xVal;
+            tri2Y=tri2yVal;
+            tri3X=tri3xVal;
+            tri3Y=tri3yVal;
+            lateral=lateralVal;
+        }
+!!!141443.cpp!!!	Triangle(in lateralVal : int, in positionVal : char)
+        name="triangle";
+        if(lateralVal<0)
+            throw MyException("UNVALID TRIANGLE VALUES");
+        else
+            lateral=lateralVal;
+!!!141571.cpp!!!	Triangle(in trixVal : double, in triyVal : double, in tri2xVal : double, in tri2yVal : double, in tri3xVal : double, in tri3yVal : double)
+ name="triangle";
+!!!141699.cpp!!!	area() : double
+ return (lateral*lateral*SQR3)/4.;
+!!!141827.cpp!!!	perimeter() : double
+ return 3*lateral;

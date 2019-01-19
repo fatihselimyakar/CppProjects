@@ -1,0 +1,20 @@
+class Point2d
+!!!132099.cpp!!!	Point2d(in newX : double, in newY : double)
+        if(newX>=0&&newY>=0){
+            polygonX=newX;
+            polygonY=newY;
+        }
+        else
+            throw MyException("Error your constructor isn't true");
+!!!132227.cpp!!!	set(in newX : double, in newY : double) : void
+        if(newX>=0&&newY>=0){
+            polygonX=newX;
+            polygonY=newY;
+        }
+        else
+            throw MyException("Error your set function isn't true");
+        return;
+!!!132355.cpp!!!	getX() : double
+ return polygonX;
+!!!132483.cpp!!!	getY() : double
+ return polygonY;

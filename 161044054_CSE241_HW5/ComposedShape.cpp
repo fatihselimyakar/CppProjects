@@ -1,0 +1,624 @@
+#include "ComposedShape.h"
+
+namespace SHAPE{
+    ComposedShape::ComposedShape()noexcept:Shape(),inner(nullptr),container(nullptr){/**/}
+    ComposedShape::ComposedShape(Shape& in,Shape& con)noexcept:Shape(){
+        inner=&in;
+        container=&con;
+    }
+    //IN THIS FUNCTION I USE THE ALLOCATE MEMORY FOR PUSH_BACK THE VECTOR BECAUSE THE POINTER'S AND LOCAL VARIABLES MECHANISM
+    void ComposedShape::optimalFit()throw(MyException){
+        if(container->getName()=="triangle"){
+            Triangle *Co=dynamic_cast<Triangle*>(container);
+            //cout<<Co->getName()<<"-"<<Co->getPosition()<<endl;
+            shapes.push_back(Co);
+            if(inner->getName()=="triangle"){
+                Triangle *In=dynamic_cast<Triangle*>(inner);
+                int nOfTri=Co->getLateral()/In->getLateral();
+            	int plus;
+            	//the starting coordinates
+            	double x=Co->getLateral()/2.0,y=0;
+            	int k,l,m=1;
+            	for(k=nOfTri;k>0;k--){
+            		plus=0;
+            		for(l=0;l<m;l++,plus=plus+In->getLateral()){
+            			//prints normal triangles
+            			//generate the one small shape and saves the vector
+                        Triangle *normal=new Triangle;
+                        Triangle temp(In->getLateral(),'i',x+plus,y,x+In->getLateral()/2.0+plus,y+(In->getLateral()*SQR3DIV2),x-(In->getLateral()/2.0)+plus,y+(In->getLateral()*SQR3DIV2),0,0,0);
+                        *normal=temp;
+                        shapes.push_back(normal);
+            			//for the reverse type triangle's and the if is need to last line
+            			if(k!=1){
+            				//set the one small shape and saves the vector
+                            Triangle *normal2=new Triangle;
+            				temp.set(In->getLateral(),'i',x+plus,y+(2*In->getLateral()*SQR3DIV2),x+In->getLateral()/2.0+plus,y+(In->getLateral()*SQR3DIV2),x-(In->getLateral()/2.0)+plus,y+(In->getLateral()*SQR3DIV2),0,0,0);
+                            *normal2=temp;
+                            shapes.push_back(normal2);
+            			}
+
+            		}
+            		m=m+1;
+            		x=x-In->getLateral()/2.0;//updating x coordinates
+            		y=y+In->getLateral()*SQR3DIV2;//updating y coordinates
+            	}
+            }
+            else if(inner->getName()=="rectangle"){
+                Rectangle *In=dynamic_cast<Rectangle*>(inner);
+            	//calculates for the two issues->width to lateral and height to lateral
+            	double NormalSide=Co->getLateral()-2*(In->getHeight()/SQR3);
+            	double ReverseSide=Co->getLateral()-2*(In->getWidth()/SQR3);
+            	//It calculates the number of triangle along the h
+            	int hNo=((SQR3DIV2*Co->getLateral())-(In->getWidth()*SQR3DIV2))/In->getHeight();
+            	int hRe=((SQR3DIV2*Co->getLateral())-(In->getHeight()*SQR3DIV2))/In->getWidth();
+            	//line by line calculating for normal align
+            	int i,j,normal=0,reverse=0;
+            	for(i=hNo;i>0;i--){
+            		normal=normal+NormalSide/In->getWidth();
+            		if(NormalSide>0)
+            			NormalSide=NormalSide-2*(In->getHeight()/SQR3);
+            	}
+            	//line by line calculating for reverse align
+            	for(j=hRe;j>0;j--){
+            		reverse=reverse+ReverseSide/In->getHeight();
+            		if(ReverseSide>0)
+            			ReverseSide=ReverseSide-2*(In->getWidth()/SQR3);
+            	}
+            	//printing the .svg files
+
+            	if(normal>reverse){//for width to lateral and height to h(normal align)
+            		//for the updating x coordinates
+            		int plus=In->getWidth();
+            		//the starting coordinates
+            		double x=In->getHeight()/SQR3,y=(Co->getLateral()*SQR3DIV2)-In->getHeight();
+            		int k,l;
+            		//the clear-cut h for dividing
+            		double m=Co->getLateral()-2*(In->getHeight()/SQR3);
+            		for(k=hNo;k>0;k--){
+            			plus=0;
+            			for(l=m/In->getWidth();l>0;l--,plus=plus+In->getWidth()){
+            				//generate the one small shape and saves the vector
+                            Rectangle *temp=new Rectangle;
+                            Rectangle drawRec(In->getHeight(),In->getWidth(),x+plus,y,0,'i');
+                            *temp=drawRec;
+            				shapes.push_back(temp);
+
+            			}
+            			//updatings for coordinates and loop's data
+            			m=m-2*(In->getHeight()/SQR3);
+            			x=x+In->getHeight()/SQR3;
+            			y=y-In->getHeight();
+            		}
+
+            	}
+            	else{//for height to lateral and width to h(reverse align)
+            		int plus=In->getHeight();
+            		double x=In->getWidth()/SQR3,y=(Co->getLateral()*SQR3DIV2)-In->getWidth();
+            		int k,l;
+            		double m=(Co->getLateral()-2*(In->getWidth()/SQR3));
+            		for(k=hRe;k>0;k--){
+            			plus=0;
+            			for(l=m/In->getHeight();l>0;l--,plus=plus+In->getHeight()){
+            				//generate the one small shape and saves the vector
+                            Rectangle *temp=new Rectangle;
+                            Rectangle drawRec(In->getWidth(),In->getHeight(),x+plus,y,0,'i');
+                            *temp=drawRec;
+            				shapes.push_back(temp);
+            			}
+            			m=m-2*(In->getWidth()/SQR3);
+            			x=x+In->getWidth()/SQR3;
+            			y=y-In->getWidth();
+            		}
+
+            	}
+
+            }
+            else if(inner->getName()=="circle"){
+                Circle *In=dynamic_cast<Circle*>(inner);
+            	//side is the max number of circle fill the line
+            	double side=Co->getLateral()-2*(In->getRadius()/SQR3)-(2*In->getRadius()/SQR3)+In->getRadius();
+            	//net height of rectangle
+            	int h=((SQR3DIV2*Co->getLateral())-In->getRadius())/(2*In->getRadius());
+            	//I calculate the total circle number
+            	int i,sum=0;
+            	for(i=h;i>0;i--){
+            		sum=sum+side/(2*In->getRadius());
+            		if(side>0)
+            			side=side-(4*In->getRadius()/SQR3);
+            	}
+            	//the first updating value
+            	double plus=2*In->getRadius();
+            	//coordinates
+            	double x=3*In->getRadius()/SQR3,y=(Co->getLateral()*SQR3DIV2)-In->getRadius();
+            	int k,l;
+            	//m is the max number of circle fill the line
+            	double m=Co->getLateral()-2*(In->getRadius()/SQR3)-(2*In->getRadius()/SQR3)+In->getRadius();
+            	for(k=h;k>0;k--){
+            		plus=0;
+            		for(l=m/(2*In->getRadius());l>0;l--,plus=plus+2*In->getRadius()){
+            			//generate the one small shape and saves the vector
+                        Circle *temp=new Circle;
+            			Circle drawCirc(0,0,0,'i',x+plus,y,In->getRadius());
+                        *temp=drawCirc;
+            			shapes.push_back(temp);
+            		}
+            		//updates
+            		m=m-4*(In->getRadius()/SQR3);
+            		x=x+2*(In->getRadius()/SQR3);
+            		y=y-2*In->getRadius();
+            	}
+            }
+            else
+                throw MyException("UNVALID SHAPE TYPE IN OPTIMALFIT");
+        }
+        else if(container->getName()=="rectangle"){
+            Rectangle *Co=dynamic_cast<Rectangle*>(container);
+            shapes.push_back(Co);
+            if(inner->getName()=="triangle"){
+                Triangle *In=dynamic_cast<Triangle*>(inner);
+            	int normal,reverse,normalNofTriWidth,reverseNofTriHeight;
+
+            	//It calculates normal and reverse align calculates(on width and height)
+            	normalNofTriWidth=Co->getHeight()/(SQR3DIV2*In->getLateral());
+            	reverseNofTriHeight=Co->getWidth()/(SQR3DIV2*In->getLateral());
+
+            	//This parts includes exception issue's triangles
+            	if((Co->getWidth()%In->getLateral())>=(In->getLateral()/2))
+            		normal=(2*(Co->getWidth()/In->getLateral()));
+            	else
+            		normal=(2*(Co->getWidth()/In->getLateral()))-1;
+            	normal=normal*normalNofTriWidth;
+
+            	//This parts includes exception issue's triangles too for reverse
+            	if((Co->getHeight()%In->getLateral())>=(In->getLateral()/2))
+            		reverse=(2*(Co->getHeight()/In->getLateral()));
+            	else
+            		reverse=(2*(Co->getHeight()/In->getLateral()))-1;
+            	reverse=reverse*reverseNofTriHeight;
+
+            	//Printing normal align triangles
+            	if(normal>reverse){
+            		double i,j;
+            		for(j=0;j+(SQR3*(In->getLateral()/2.0))<=Co->getHeight();j=j+(SQR3*(In->getLateral()/2.0))){
+            			for(i=0;i+In->getLateral()<=Co->getWidth();i=i+In->getLateral()){
+            				//generate the one small shape and saves the vector
+                            Triangle *normal=new Triangle;
+                            Triangle temp(In->getLateral(),'i',i,j,In->getLateral()+i,j,(In->getLateral()/2.0)+i,SQR3*(In->getLateral()/2.0)+j,0,0,0);
+                            *normal=temp;
+                            shapes.push_back(normal);
+            			}
+            		}
+            		//prints reverse type triangle
+            		double k,l;
+            		for(l=(SQR3*(In->getLateral()/2.0));l<=Co->getHeight();l=l+(SQR3*(In->getLateral()/2.0))){
+            			for(k=In->getLateral()/2.0;k+In->getLateral()<=Co->getWidth();k=k+In->getLateral()){
+            				//generate the one small shape and saves the vector
+                            Triangle *normal=new Triangle;
+                            Triangle temp(In->getLateral(),'i',k,l,In->getLateral()/2.0+k,l-(SQR3*(In->getLateral()/2.0)),In->getLateral()+k,l,0,0,0);
+                            *normal=temp;
+            				shapes.push_back(normal);
+            			}
+            		}
+
+            	}
+            	//Printing reverse align triangles
+            	else{
+            		//prints reverse type triangle
+            		double i,j;
+            		for(i=0;i+(SQR3*(In->getLateral()/2.0))<=Co->getWidth();i=i+(SQR3*(In->getLateral()/2.0))){
+            			for(j=0;j+In->getLateral()<=Co->getHeight();j=j+In->getLateral()){
+            				//generate the one small shape and saves the vector
+                            Triangle *normal=new Triangle;
+                            Triangle temp(In->getLateral(),'i',i,j,i,j+In->getLateral(),SQR3*(In->getLateral()/2.0)+i,(In->getLateral()/2.0)+j,0,0,0);
+                            *normal=temp;
+            				shapes.push_back(normal);
+            			}
+            		}
+            		//prints normal type triangle
+            		double k,l;
+            		for(l=(In->getLateral()/2.0);l+In->getLateral()<=Co->getHeight();l=l+In->getLateral()){
+            			for(k=(SQR3*(In->getLateral()/2.0));k<=Co->getWidth();k=k+(SQR3*(In->getLateral()/2.0))){
+            				//generate the one small shape and saves the vector
+                            Triangle *normal=new Triangle;
+                            Triangle temp(In->getLateral(),'i',k,l,k-(SQR3*(In->getLateral()/2.0)),In->getLateral()/2.0+l,k,In->getLateral()+l,0,0,0);
+                            *normal=temp;
+            				shapes.push_back(normal);
+            			}
+            		}
+            	}
+            }
+            else if(inner->getName()=="rectangle"){
+                Rectangle *In=dynamic_cast<Rectangle*>(inner);
+
+            	int normal,reverse,addForEmpty1,addForEmpty2,temp;
+            	int smallwidth=In->getWidth();
+            	int smallheight=In->getHeight();
+            	if(smallwidth<smallheight){//My program is runs the only when small.width>small.height.This ıf provides that.
+            		temp=smallwidth;
+            		smallwidth=smallheight;
+            		smallheight=temp;
+            	}
+            	//The program runs two way the first is normal issue->align the width to width and height to height
+            	normal=(Co->getWidth()/smallwidth)*(Co->getHeight()/smallheight);
+            	//second is width to height and height to width
+            	reverse=(Co->getHeight()/smallwidth)*(Co->getWidth()/smallheight);
+
+            	//if there are spaces in big shape then adds the rotated rectangles for normal and reverse align
+            	addForEmpty1=(((Co->getWidth()-((Co->getWidth()/smallwidth)*smallwidth))/smallheight)*(Co->getHeight()/smallwidth));
+            	addForEmpty2=(((Co->getHeight()-((Co->getHeight()/smallwidth)*smallwidth))/smallheight)*(Co->getWidth()/smallwidth));
+
+            	//I calculated the total rectangle number
+            	normal=normal+addForEmpty1;
+            	reverse=reverse+addForEmpty2;
+
+            	if(normal>reverse){//This part is printing .svg file and print in datas in terminal
+            		int i,j,k,l;
+            		for(i=0;i+smallwidth<=Co->getWidth();i=i+smallheight){
+            			for(j=0;j+smallheight<=Co->getHeight();j=j+smallheight){
+            				//generate the one small shape and saves the vector
+                            Rectangle *temp=new Rectangle;
+            				Rectangle normal(smallheight,smallwidth,i,j,0,'i');
+                            *temp=normal;
+            				shapes.push_back(temp);
+            			}
+            		}
+            		//this part prints added and rotated rectangles
+            		for(k=i;k+smallheight<=Co->getWidth();k=k+smallheight){
+            			for(l=0;l+smallwidth<=Co->getHeight();l=l+smallwidth){
+            				//generate the one small shape and saves the vector
+                            Rectangle *temp2=new Rectangle;
+            				Rectangle normal2(smallwidth,smallheight,k,l,0,'i');
+                            *temp2=normal2;
+            				shapes.push_back(temp2);
+            			}
+            		}
+
+
+            	}
+            	else{
+            		int i,j,k,l;
+            		for(i=0;i+smallheight<=Co->getWidth();i=i+smallheight){
+            			for(j=0;j+smallwidth<=Co->getHeight();j=j+smallwidth){
+            				//generate the one small shape and saves the vector
+                            Rectangle *temp=new Rectangle;
+            				Rectangle reverse(smallwidth,smallheight,i,j,0,'i');
+                            *temp=reverse;
+            				shapes.push_back(temp);
+
+            			}
+            		}
+            		//this part prints added and rotated reverse rectangles
+            		for(k=0;k+smallwidth<=Co->getWidth();k=k+smallwidth){
+            			for(l=j;l+smallheight<=Co->getHeight();l=l+smallheight){
+            				//generate the one small shape and saves the vector
+                            Rectangle *temp2=new Rectangle;
+            				Rectangle reverse2(smallheight,smallwidth,'i',k,l,0);
+                            *temp2=reverse2;
+                            shapes.push_back(temp2);
+            			}
+            		}
+            	}
+            }
+            else if(inner->getName()=="circle"){
+                Circle *In=dynamic_cast<Circle*>(inner);
+                //I calculate the circles in normal issue
+                int nofCircle=(Co->getWidth()/(2*In->getRadius()))*(Co->getHeight()/(2*In->getRadius()));
+
+                //this ones are for the exception
+                double control_ex1=Co->getWidth()-((Co->getWidth()/(2*In->getRadius()))*2*In->getRadius())+In->getRadius();
+                double control_ex2=Co->getHeight()-((Co->getHeight()/(2*In->getRadius()))*2*In->getRadius())+In->getRadius();
+                double excause=In->getRadius()*SQR3+In->getRadius();
+
+                //this part controls the exception
+                if((control_ex1<3*In->getRadius()&&control_ex1>=excause)&&(control_ex2<3*In->getRadius()&&control_ex2>=excause))
+                    nofCircle=nofCircle+(Co->getHeight()/(2*In->getRadius())-1)+(Co->getWidth()/(2*In->getRadius())-1)+1;
+                else if(control_ex1<3*In->getRadius()&&control_ex1>=excause)
+                    nofCircle=nofCircle+((Co->getHeight()/(2*In->getRadius()))-1);
+                else if(control_ex2<3*In->getRadius()&&control_ex2>=excause)
+                    nofCircle=nofCircle+((Co->getWidth()/(2*In->getRadius()))-1);
+
+                int i,j;
+                for(i=In->getRadius();i+In->getRadius()<=Co->getWidth();i=i+2*In->getRadius()){
+                    for(j=In->getRadius();j+In->getRadius()<=Co->getHeight();j=j+2*In->getRadius()){
+                        //generate the one small shape and saves the vector
+                        Circle *temp=new Circle;
+                        Circle drawCirc(0,0,0,'i',i,j,In->getRadius());
+                        *temp=drawCirc;
+                        shapes.push_back(temp);
+                    }
+                }
+                //for the printing exception issue
+                if((control_ex1<3*In->getRadius()&&control_ex1>=excause)&&(control_ex2<3*In->getRadius()&&control_ex2>=excause)){
+
+                    int k,l;
+                    double m=2*In->getRadius();
+                    double n=(Co->getHeight()/(2*In->getRadius()))*2*In->getRadius()+(SQR3DIV2*In->getRadius());
+                    for(k=0;k<(Co->getWidth()/(2*In->getRadius()));k++){
+                        //generate the one small shape and saves the vector
+                        Circle *temp=new Circle;
+                        Circle drawCirc(0,0,0,'i',m,n,In->getRadius());
+                        *temp=drawCirc;
+                        shapes.push_back(temp);
+
+                        m=m+2*In->getRadius();
+                    }
+                    m=(Co->getWidth()/(2*In->getRadius()))*2*In->getRadius()+(SQR3DIV2*In->getRadius());
+                    n=2*In->getRadius();
+                    for(l=1;l<(Co->getHeight()/(2*In->getRadius()));l++){
+                        //generate the one small shape and saves the vector
+                        Circle *temp=new Circle;
+                        Circle drawCirc(0,0,0,'i',m,n,In->getRadius());
+                        *temp=drawCirc;
+                        shapes.push_back(temp);
+
+                        n=n+2*In->getRadius();
+                    }
+                }
+                else if(control_ex2<3*In->getRadius()&&control_ex2>=excause){
+                    int k;
+                    double m=2*In->getRadius();
+                    double n=(Co->getHeight()/(2*In->getRadius()))*2*In->getRadius()+(SQR3DIV2*In->getRadius());
+                    for(k=1;k<(Co->getWidth()/(2*In->getRadius()));k++){
+                        //generate the one small shape and saves the vector
+                        Circle *temp=new Circle;
+                        Circle drawCirc(0,0,0,'i',m,n,In->getRadius());
+                        *temp=drawCirc;
+                        shapes.push_back(temp);
+
+                        m=m+2*In->getRadius();
+                    }
+                }
+                else if(control_ex1<3*In->getRadius()&&control_ex1>=excause){
+                    int l;
+                    double m=(Co->getWidth()/(2*In->getRadius()))*2*In->getRadius()+(SQR3DIV2*In->getRadius());
+                    double n=2*In->getRadius();
+                    for(l=1;l<(Co->getHeight()/(2*In->getRadius()));l++){
+                        //generate the one small shape and saves the vector
+                        Circle *temp=new Circle;
+                        Circle drawCirc(0,0,0,'i',m,n,In->getRadius());
+                        *temp=drawCirc;
+                        shapes.push_back(temp);
+
+                        n=n+2*In->getRadius();
+                    }
+                }
+            }
+            else
+                throw MyException("UNVALID SHAPE TYPE IN OPTIMALFIT");
+        }
+        else if(container->getName()=="circle"){
+            Circle *Co=dynamic_cast<Circle*>(container);
+            shapes.push_back(Co);
+            if(inner->getName()=="circle"){
+                Circle *In=dynamic_cast<Circle*>(inner);
+            	//In this function I used the equalateral triangle's loop and multiplication to 6
+            	int nOfCircle;
+            	int total=0;
+            	for(nOfCircle=((Co->getRadius()-In->getRadius())/(2*In->getRadius()))+1;nOfCircle>1;nOfCircle--){
+            		total=total+nOfCircle;
+            	}
+            	//for there is no circle issue
+            	if(Co->getRadius()>In->getRadius())
+            		total=(3*total)+(3*(total/2-1))+1;
+            	//for there is no circle issue
+            	if(Co->getRadius()>In->getRadius()){
+            		//generate the one small shape and saves the vector
+                    Circle *temp=new Circle;
+                    Circle smallC(0,0,0,'i',Co->getRadius(),Co->getRadius(),In->getRadius());
+                    *temp=smallC;
+                    shapes.push_back(temp);
+
+            	}
+
+
+            	//number of vertical circle
+            	int nOfVertCircle=(Co->getRadius()-In->getRadius())/(2*In->getRadius())+1;
+            	int plus;
+            	double x=Co->getRadius(),y=Co->getRadius();
+            	int k,l,m=1;
+            	//the triangle h's
+            	for(k=nOfVertCircle;k>0;k--){
+            		plus=0;
+            		// the triangle line's
+            		for(l=1;l<m;l++,plus=plus+2*In->getRadius()){
+            			int rotate;
+            			//this loop is rotate to circle center
+            			for(rotate=0;rotate<360;rotate=rotate+60){
+            				//generate the one small shape and saves the vector
+                            Circle *temp=new Circle;
+                            Circle smallC(Co->getCenterCoordX(),Co->getCenterCoordY(),rotate,'i',x+plus,y,In->getRadius());
+                            *temp=smallC;
+                            shapes.push_back(temp);
+            			}
+            		}
+            		// updates
+            		m=m+1;
+            		x=x-In->getRadius();
+            		y=y+In->getRadius()*SQR3;
+            	}
+
+            }
+            else if(inner->getName()=="triangle"){
+                Triangle *In=dynamic_cast<Triangle*>(inner);
+
+            	//In this function I fill the regular equalateral triangle in circle and rotate it loop
+            	int target=Co->getRadius()/In->getLateral();
+            	int counter=1,i,total=0;
+            	for(i=1;i<=target;i++){
+            		total=total+counter;
+            		counter=counter+2;
+            	}
+            	total=6*total;//360 degree/60 degree
+            	int nOfTri=Co->getRadius()/In->getLateral();
+            	//x's adds
+            	int plus;
+            	//coordinates
+            	double x=Co->getRadius(),y=Co->getRadius();
+            	int k,l,m=1;
+            	for(k=nOfTri;k>0;k--){
+            		plus=0;
+            		for(l=0;l<m;l++,plus=plus+In->getLateral()){
+            			int rotate;
+            			//this loop for the normal align triangle
+            			for(rotate=0;rotate<360;rotate=rotate+60){
+            				//generate the one small shape and saves the vector
+                            Triangle *normal=new Triangle;
+                            Triangle smallTri(In->getLateral(),'i',x+plus,y,x+In->getLateral()/2.0+plus,y+(In->getLateral()*SQR3DIV2),(x-In->getLateral()/2.0)+plus,y+(In->getLateral()*SQR3DIV2),rotate,Co->getCenterCoordX(),Co->getCenterCoordY());
+                            *normal=smallTri;
+                            shapes.push_back(normal);
+            			}
+            			//this loop for the reverse align triangle
+            			if(k!=1){
+            				int rotate2;
+            				for(rotate2=0;rotate2<360;rotate2=rotate2+60){
+            					//generate the one small shape and saves the vector
+                                Triangle *normal2=new Triangle;
+                                Triangle reverseSmallTri(In->getLateral(),'i',x+plus,y+(2*In->getLateral()*SQR3DIV2),x+In->getLateral()/2.0+plus,y+(In->getLateral()*SQR3DIV2),(x-In->getLateral()/2.0)+plus,y+(In->getLateral()*SQR3DIV2),rotate2,Co->getCenterCoordX(),Co->getCenterCoordY());
+                                *normal2=reverseSmallTri;
+                                shapes.push_back(normal2);
+
+            				}
+            			}
+            		}
+            		//Updates
+            		m=m+1;
+            		x=x-In->getLateral()/2.0;
+            		y=y+In->getLateral()*SQR3DIV2;
+            	}
+            }
+            else if(inner->getName()=="rectangle"){
+                Rectangle *In=dynamic_cast<Rectangle*>(inner);
+
+            	int squareWidth=(2*Co->getRadius())/1.414;
+
+            	int nofRect,addForEmpty1,addForEmpty2,temp;
+
+            	nofRect=(squareWidth/In->getWidth())*(squareWidth/In->getHeight());
+            	addForEmpty1=(((squareWidth-((squareWidth/In->getWidth())*In->getWidth()))/In->getHeight())*(squareWidth/In->getWidth()));
+            	nofRect=nofRect+addForEmpty1;
+
+            	int i,j,k,l;
+
+            	for(i=0;i+In->getWidth()<=squareWidth;i=i+In->getWidth()){
+            		for(j=0;j+In->getHeight()<=squareWidth;j=j+In->getHeight()){
+            			//generate the one small shape and saves the vector
+                        Rectangle *temp=new Rectangle;
+                        Rectangle normal(In->getHeight(),In->getWidth(),i+(Co->getRadius()-squareWidth/2.),j+(Co->getRadius()-squareWidth/2.),0,'i');
+                        *temp=normal;
+                        shapes.push_back(temp);
+
+            		}
+            	}
+            	for(k=i;k+In->getHeight()<=squareWidth;k=k+In->getHeight()){
+            		for(l=0;l+In->getWidth()<=squareWidth;l=l+In->getWidth()){
+            			//generate the one small shape and saves the vector
+                        Rectangle *temp=new Rectangle;
+                        Rectangle reverse(In->getWidth(),In->getHeight(),k+(Co->getRadius()-squareWidth/2.),l+(Co->getRadius()-squareWidth/2.),0,'i');
+                        *temp=reverse;
+                        shapes.push_back(temp);
+            		}
+            	}
+            }
+        }
+        else
+            throw MyException("UNVALID SHAPE TYPE IN OPTIMALFIT");
+
+        return;
+    }
+
+    //OVERRIDED FUNCTIONS
+    double ComposedShape::perimeter()const noexcept{
+        double total;
+        for(int i=0;i<shapes.size();i++)
+            total+=shapes[i]->perimeter();
+
+        return total;
+    }
+    double ComposedShape::area()const noexcept{
+        double total;
+        for(int i=0;i<shapes.size();i++)
+            total+=shapes[i]->area();
+
+        return total;
+    }
+
+    //I use the global function << in it
+    void ComposedShape::draw(ostream& outputStream)const throw(MyException){
+        for(int i=0;i<shapes.size();i++){
+            if(shapes[i]==nullptr)
+                throw MyException("SHAPES IS NULLPTR!");
+            else
+                outputStream<<(*shapes[i]);
+        }
+        outputStream<<"</svg>";
+        return;
+    }
+
+    //GETTERS
+    Shape& ComposedShape::getInner()const noexcept{ return *inner; }
+    Shape& ComposedShape::getContainer()const noexcept{ return *container; }
+    vector<Shape*> ComposedShape::getShapePtrVec()const noexcept{ return shapes; }
+
+
+    //GLOBAL CONVERTALL FUNCTION PROVIDE US SHAPE TO POLYGON CONVERTING
+    vector<Shape*> convertAll(vector<Shape*>ConvertingVector)throw(MyException){
+        //I CLASSIFY RESPECT TO SHAPE TYPES AND GENERATES POLYGON AND PUSH_BACK THE GENERATED POLYGON'S POINTER
+        vector<Shape*>ConvertedVector;
+        for(int i=0;i<ConvertingVector.size();++i){
+            PolygonVect *temp=new PolygonVect;
+            if(ConvertingVector[i]->getName()=="rectangle"){
+                Rectangle* ptr=dynamic_cast<Rectangle*>(ConvertingVector[i]);
+                PolygonVect pd(*ptr);
+                *temp=pd;
+                ConvertedVector.push_back(temp);
+            }
+            else if(ConvertingVector[i]->getName()=="triangle"){
+                Triangle* ptr=dynamic_cast<Triangle*>(ConvertingVector[i]);
+                PolygonVect pd(*ptr);
+                *temp=pd;
+                ConvertedVector.push_back(temp);
+            }
+            else if(ConvertingVector[i]->getName()=="circle"){
+                Circle* ptr=dynamic_cast<Circle*>(ConvertingVector[i]);
+                PolygonVect pd(*ptr);
+                *temp=pd;
+                ConvertedVector.push_back(temp);
+            }
+            else
+                throw MyException("CONVERTALL FUNCTION ERROR UNVALID SHAPE TYPE");
+
+        }
+        return ConvertedVector;
+    }
+
+    //OVERRIDED ++,-- OPERATOR
+    Shape& ComposedShape::operator++()noexcept{
+        ComposedShape cs1(++(*inner),++(*container));
+        Shape*temp=&cs1;
+        return *temp;
+    }
+    Shape& ComposedShape::operator++(int ignore)noexcept{
+        ComposedShape cs1((*inner)++,(*container)++);
+        Shape*temp=&cs1;
+        return *temp;
+    }
+    Shape& ComposedShape::operator--()noexcept{
+        ComposedShape cs1(--(*inner),--(*container));
+        Shape*temp=&cs1;
+        return *temp;
+    }
+    Shape& ComposedShape::operator--(int ignore)noexcept{
+        ComposedShape cs1((*inner)--,(*container)--);
+        Shape*temp=&cs1;
+        return *temp;
+    }
+
+    //FOR THE DYNAMIC ALLOCATED shapes VECTOR
+    ComposedShape::~ComposedShape(){
+        for(int i;i<shapes.size();++i){
+            delete shapes[i];
+        }
+        shapes.clear();
+    }
+
+}

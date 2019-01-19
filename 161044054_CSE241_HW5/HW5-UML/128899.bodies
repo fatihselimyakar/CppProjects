@@ -1,0 +1,63 @@
+class Rectangle
+!!!136067.cpp!!!	Rectangle()
+ name="rectangle";
+!!!136195.cpp!!!	Rectangle(in newHeight : int, in newWidth : int, in x : double, in y : double, in newRotate : int, in p : char)
+        name="rectangle";
+        if(newHeight<=0||newWidth<=0){
+            throw MyException("UNVALID WIDTH OR HEIGHT VALUE");
+        }
+        else{
+            height=newHeight;
+            width=newWidth;
+        }
+!!!136323.cpp!!!	Rectangle(in heightVal : int, in widthVal : int, in positionVal : char)
+        name="rectangle";
+        if(heightVal<=0||widthVal<=0){
+            throw MyException("UNVALID WIDTH OR HEIGHT VALUE");
+        }
+        else{
+            height=heightVal;
+            width=widthVal;
+        }
+!!!136451.cpp!!!	area() : double
+ return height*width;
+!!!136579.cpp!!!	perimeter() : double
+ return 2*(height+width);
+!!!136963.cpp!!!	operator ++(in  : int) : Shape
+         Rectangle r1(height,width,++pos_x,++pos_y,rotate,position);
+         Shape*temp=&r1;
+         return *temp;
+!!!137219.cpp!!!	operator --(in  : int) : Shape
+        Rectangle r1(height,width,--pos_x,--pos_y,rotate,position);
+        Shape*temp=&r1;
+        return *temp;
+!!!137347.cpp!!!	getHeight() : int
+ return height;
+!!!137475.cpp!!!	getWidth() : int
+ return width;
+!!!137603.cpp!!!	set(in newHeight : int, in newWidth : int, in x : double, in y : double, in newRotate : int, in p : char) : void
+        if(newHeight<=0)
+    		throw MyException("Program Aborted!(UNVALID HEIGHT VALUE)");
+    	else
+    		height=newHeight;
+
+    	if(newWidth<=0)
+    		throw MyException("Program Aborted!(UNVALID WIDTH VALUE)");
+    	else
+    		width=newWidth;
+
+    	if(p!='c'&&p!='i')
+    		throw MyException("Program Aborted!(UNVALID POSITION VALUE)");
+    	else
+    		position=p;
+
+    	if(x<0||y<0)
+    		throw MyException("Program Aborted!(UNVALID COORD VALUE)");
+    	else{
+    		pos_x=x;
+    		pos_y=y;
+    	}
+
+    	rotate=newRotate;
+
+    	return;

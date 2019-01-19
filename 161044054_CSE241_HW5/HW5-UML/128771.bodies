@@ -1,0 +1,133 @@
+class PolygonDyn
+!!!133507.cpp!!!	PolygonDyn()
+ points=new Point2d[capacity];
+!!!133635.cpp!!!	PolygonDyn(in pointVector : vector<Point2d>)
+        capacity=pointVector.capacity();
+        size=pointVector.size();
+        position='c';
+        rotate=0;
+        pos_x=0;
+        pos_y=0;
+        if(capacity<=0||size<=0)
+            throw MyException("Error your constructor isn't true");
+        points= new Point2d[capacity];
+        for(int i=0;i<size;i++)
+            points[i]=pointVector[i];
+!!!133763.cpp!!!	PolygonDyn(in newCapacity : int, in newSize : int)
+        rotate=0;
+        pos_x=0;
+        pos_y=0;
+        position='c';
+        capacity=newCapacity;
+        size=newSize;
+        if(capacity<=0||size<=0)
+            throw MyException("Error your constructor isn't true");
+        points=new Point2d[capacity];
+!!!133891.cpp!!!	PolygonDyn(in rec : Rectangle)
+        points=new Point2d[4];
+        //I FIND THE POINTS ACCORDING TO STARTING POINTS TO ALL CORNER POİNTS WITH WITH AND HEIGHT
+        points[0].set(rec.getPosX(),rec.getPosY());
+        points[1].set(rec.getPosX()+rec.getWidth(),rec.getPosY());
+        points[2].set(rec.getPosX()+rec.getWidth(),rec.getPosY()+rec.getHeight());
+        points[3].set(rec.getPosX(),rec.getPosY()+rec.getHeight());
+
+        capacity=4;
+        size=4;
+        rotate=0;
+        pos_x=0;
+        pos_y=0;
+        if(rec.getPosition()=='i'||rec.getPosition()=='c')
+            position=rec.getPosition();
+        else
+            throw MyException("Position is not true");
+!!!134019.cpp!!!	PolygonDyn(in tri : Triangle)
+        points=new Point2d[3];
+        //DIRECTLY I ASSIGNED THE POINTS
+        points[0].set(tri.getTriX(),tri.getTriY());
+        points[1].set(tri.getTri2X(),tri.getTri2Y());
+        points[2].set(tri.getTri3X(),tri.getTri3Y());
+        capacity=3;
+        size=3;
+        if(tri.getRotate()<=360&&tri.getRotate()>=0)
+            rotate=tri.getRotate();
+        else
+            throw MyException("degree is not true");
+
+        if(tri.getPosition()=='i'||tri.getPosition()=='c')
+            position=tri.getPosition();
+        else
+            throw MyException("Position is not true");
+
+    	pos_x=tri.getPosX();
+        pos_y=tri.getPosY();
+!!!134147.cpp!!!	PolygonDyn(in cir : Circle)
+        points=new Point2d[100];
+        capacity=100;
+        size=100;
+        if(cir.getRotate()<=360&&cir.getRotate()>=0)
+            rotate=cir.getRotate();
+        else
+            throw MyException("degree is not true");
+
+        if(cir.getPosition()=='i'||cir.getPosition()=='c')
+            position=cir.getPosition();
+        else
+            throw MyException("Position is not true");
+        //I USED THE CIRCLE EQUATION WHILE I AM FINDING THE 100 POINT
+        //AND I USED HELPER FUNTION "CircleEquationY()" TOO
+        pos_x=cir.getPosX();
+        pos_y=cir.getPosY();
+        double increase=(2*cir.getRadius())/50.1;
+        double startingX=cir.getCenterCoordX()-cir.getRadius();
+        double startingY;
+        double reverseY;
+        //FOR THE BOTTOM SIDE
+        for(int i=0;i<50;i+=1,startingX+=increase){
+            startingY=CircleEquationY(cir.getCenterCoordX(),cir.getCenterCoordY(),cir.getRadius(),startingX);
+            points[i].set(startingX,startingY);
+        }
+        //FOR THE TOP SIDE
+        startingX=cir.getCenterCoordX()-cir.getRadius()+increase;
+        for(int i=0;i<50;i+=1,startingX+=increase){
+            startingY=CircleEquationY(cir.getCenterCoordX(),cir.getCenterCoordY(),cir.getRadius(),startingX);
+            reverseY=cir.getCenterCoordY()-(startingY-cir.getCenterCoordY());
+            points[99-i].set(startingX,reverseY);
+        }
+!!!134403.cpp!!!	operator [](in index : int) : Point2d
+        if(index<0 || index>=size)
+            throw MyException("Your index value isn't true");
+        return points[index];
+!!!134531.cpp!!!	getCapacity() : int
+ return capacity;
+!!!134659.cpp!!!	getSize() : int
+ return size;
+!!!134787.cpp!!!	operator =(in rightSide : PolygonDyn) : PolygonDyn
+//assignment operator
+        if(*this==rightSide)
+            return *this;
+
+        delete[]points;
+		points=new Point2d[rightSide.capacity];
+		for(int i=0;i<rightSide.size;i++)
+			points[i]=rightSide.points[i];
+		size=rightSide.size;
+		capacity=rightSide.capacity;
+        rotate=rightSide.rotate;
+        pos_x=rightSide.pos_x;
+        pos_y=rightSide.pos_y;
+        position=rightSide.position;
+
+		return *this;
+!!!134915.cpp!!!	PolygonDyn(in object : PolygonDyn)
+//copy constructor
+        points=new Point2d[ getCapacity()];
+        capacity= getCapacity();
+        size= getSize();
+        rotate= getRotate();
+        pos_x= getPosX();
+        pos_y= getPosY();
+        position= getPosition();
+        for(int i=0;i<size;i++)
+            points[i]= points[i];
+!!!135043.cpp!!!	~PolygonDyn()
+ delete[] points;

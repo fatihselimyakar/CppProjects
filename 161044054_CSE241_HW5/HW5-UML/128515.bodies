@@ -1,0 +1,13 @@
+class Polygon
+!!!131587.cpp!!!	Polygon()
+ name="polygon";
+!!!131715.cpp!!!	Polygon(in x : double, in y : double, in newRotate : int, in p : char)
+ name="polygon";
+!!!132611.cpp!!!	area() : double
+ return 0.0;
+!!!132739.cpp!!!	perimeter() : double
+ return 0.0;
+!!!132995.cpp!!!	operator ++(in  : int) : Shape
+ return *this;
+!!!133251.cpp!!!	operator --(in  : int) : Shape
+ return *this;
